@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Shorts & Reels Blocker",
+  "version": "1.0",
+  "description": "Block YouTube Shorts and Instagram Reels strictly to reclaim your attention.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.instagram.com/*"
+  ],
+  "background": {
+    "service_worker": "background/serviceWorker.js"
+  },
+  "action": {
+    "default_popup": "ui/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.instagram.com/*"
+      ],
+      "js": [
+        "core/storageManager.js",
+        "core/timerManager.js",
+        "ui/overlay.js",
+        "content/youtubeBlocker.js",
+        "content/instagramBlocker.js",
+        "content/observer.js"
+      ],
+      "css": [
+        "ui/overlay.css"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}

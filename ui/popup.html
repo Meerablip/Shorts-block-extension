@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shorts & Reels Blocker</title>
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🛡️</div>
+      <h1>Focus Mode</h1>
+    </div>
+
+    <!-- Active Timer View -->
+    <div id="active-view" class="view hidden">
+      <p class="status-text">Blocking is active. Stay focused!</p>
+      <div class="timer-display" id="popup-timer">00:00:00</div>
+      <p class="warning-text">Block cannot be cancelled early.</p>
+    </div>
+
+    <!-- Set Block View -->
+    <div id="setup-view" class="view">
+      <p class="desc">Select how long to block short-form content.</p>
+      <div class="duration-options">
+        <button class="duration-btn" data-hours="1">1 hr</button>
+        <button class="duration-btn" data-hours="3">3 hrs</button>
+        <button class="duration-btn" data-hours="5">5 hrs</button>
+        <button class="duration-btn" data-hours="24">24 hrs</button>
+      </div>
+      
+      <div class="custom-duration">
+        <input type="number" id="custom-hours" min="0.5" step="0.5" placeholder="Custom hrs">
+        <button id="start-custom-btn" class="primary-btn">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../core/storageManager.js"></script>
+  <script src="../core/timerManager.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
