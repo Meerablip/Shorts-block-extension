@@ -45,9 +45,18 @@ async function startBlockingSession(hours) {
   updatePopupState();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Init view
   updatePopupState();
+
+  // Load block whole youtube setting
+  const blockWholeYoutubeCheckbox = document.getElementById('block-whole-youtube');
+  if (blockWholeYoutubeCheckbox) {
+    blockWholeYoutubeCheckbox.checked = await StorageManager.getBlockWholeYoutube();
+    blockWholeYoutubeCheckbox.addEventListener('change', async (e) => {
+      await StorageManager.setBlockWholeYoutube(e.target.checked);
+    });
+  }
 
   // Preset buttons
   document.querySelectorAll('.duration-btn').forEach(btn => {

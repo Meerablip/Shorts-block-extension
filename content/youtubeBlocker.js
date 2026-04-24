@@ -1,5 +1,6 @@
 const YoutubeBlocker = {
   isBlockedMode: false,
+  isWholeYoutubeBlocked: false,
 
   selectorsToRemove: [
     // Shorts shelf on homepage
@@ -16,10 +17,16 @@ const YoutubeBlocker = {
 
   async init() {
     this.isBlockedMode = await TimerManager.isBlocked();
+    this.isWholeYoutubeBlocked = await StorageManager.getBlockWholeYoutube();
     
     // Listen for storage changes
     StorageManager.onBlockUpdate((newTime) => {
       this.isBlockedMode = (Date.now() < newTime);
+      this.enforce();
+    });
+
+    StorageManager.onSettingsUpdate((isWhole) => {
+      this.isWholeYoutubeBlocked = isWhole;
       this.enforce();
     });
 
@@ -32,7 +39,7 @@ const YoutubeBlocker = {
       return;
     }
 
-    if (window.location.pathname.startsWith('/shorts')) {
+    if (this.isWholeYoutubeBlocked || window.location.pathname.startsWith('/shorts')) {
       OverlayManager.show();
       // Try to pause `<video>` elements in background
       document.querySelectorAll('video').forEach(vid => vid.pause());
@@ -43,6 +50,7 @@ const YoutubeBlocker = {
 
   enforceDOM() {
     if (!this.isBlockedMode) return;
+    if (this.isWholeYoutubeBlocked) return; // No need to hide specific DOM elements if whole site is covered by overlay
 
     this.selectorsToRemove.forEach(selector => {
       document.querySelectorAll(selector).forEach(el => {

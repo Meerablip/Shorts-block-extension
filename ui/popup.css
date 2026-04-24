@@ -148,3 +148,27 @@ input[type="number"]:focus {
   text-align: center;
   opacity: 0.8;
 }
+
+/* Settings Styles */
+.settings-group {
+  margin-bottom: 20px;
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.setting-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--accent-color);
+}
