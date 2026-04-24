@@ -16,16 +16,16 @@ const StorageManager = {
     });
   },
 
-  async setBlockWholeYoutube(value) {
+  async setYoutubeBlockEndTime(timestamp) {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ blockWholeYoutube: value }, () => resolve());
+      chrome.storage.local.set({ youtubeBlockEndTime: timestamp }, () => resolve());
     });
   },
 
-  async getBlockWholeYoutube() {
+  async getYoutubeBlockEndTime() {
     return new Promise((resolve) => {
-      chrome.storage.local.get(['blockWholeYoutube'], (result) => {
-        resolve(!!result.blockWholeYoutube);
+      chrome.storage.local.get(['youtubeBlockEndTime'], (result) => {
+        resolve(result.youtubeBlockEndTime || 0);
       });
     });
   },
@@ -33,16 +33,17 @@ const StorageManager = {
   // Listen to changes in storage to update state across tabs
   onBlockUpdate(callback) {
     chrome.storage.onChanged.addListener((changes, areaName) => {
-      if (areaName === 'local' && changes.blockEndTime) {
-        callback(changes.blockEndTime.newValue);
-      }
-    });
-  },
-
-  onSettingsUpdate(callback) {
-    chrome.storage.onChanged.addListener((changes, areaName) => {
-      if (areaName === 'local' && changes.blockWholeYoutube !== undefined) {
-        callback(changes.blockWholeYoutube.newValue);
+      if (areaName === 'local') {
+        const updates = {};
+        if (changes.blockEndTime) {
+          updates.blockEndTime = changes.blockEndTime.newValue;
+        }
+        if (changes.youtubeBlockEndTime) {
+          updates.youtubeBlockEndTime = changes.youtubeBlockEndTime.newValue;
+        }
+        if (Object.keys(updates).length > 0) {
+          callback(updates);
+        }
       }
     });
   }

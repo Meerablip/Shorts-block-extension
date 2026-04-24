@@ -1,17 +1,39 @@
 const OverlayManager = {
   overlayElement: null,
   timerInterval: null,
+  currentBlockType: null,
 
-  createOverlay() {
-    if (this.overlayElement) return;
+  createOverlay(blockType) {
+    if (this.overlayElement) {
+      // If it exists but blockType changed, update text
+      if (this.currentBlockType !== blockType) {
+        this.currentBlockType = blockType;
+        const h1 = this.overlayElement.querySelector('h1');
+        const p = this.overlayElement.querySelector('p');
+        if (blockType === 'youtube') {
+          h1.textContent = 'YouTube is Blocked';
+          p.textContent = 'The entire YouTube site is currently blocked. You can return when the timer expires.';
+        } else {
+          h1.textContent = 'Focus Mode Active';
+          p.textContent = 'Short-form content is currently blocked to protect your attention and time.';
+        }
+      }
+      return;
+    }
 
+    this.currentBlockType = blockType;
     this.overlayElement = document.createElement('div');
     this.overlayElement.id = 'shorts-blocker-overlay';
     
+    const title = blockType === 'youtube' ? 'YouTube is Blocked' : 'Focus Mode Active';
+    const message = blockType === 'youtube' 
+      ? 'The entire YouTube site is currently blocked. You can return when the timer expires.'
+      : 'Short-form content is currently blocked to protect your attention and time. You can return when the timer expires.';
+
     this.overlayElement.innerHTML = `
       <div id="shorts-blocker-overlay-content">
-        <h1>Focus Mode Active</h1>
-        <p>Short-form content is currently blocked to protect your attention and time. You can return when the timer expires.</p>
+        <h1>${title}</h1>
+        <p>${message}</p>
         <div id="shorts-blocker-timer">00:00:00</div>
       </div>
     `;
@@ -47,6 +69,7 @@ const OverlayManager = {
     if (this.overlayElement && this.overlayElement.parentNode) {
       this.overlayElement.parentNode.removeChild(this.overlayElement);
       this.overlayElement = null;
+      this.currentBlockType = null;
       
       // Restore scrolling
       document.documentElement.style.overflow = '';
@@ -62,30 +85,37 @@ const OverlayManager = {
   },
 
   async updateTimer() {
-    const isBlocked = await TimerManager.isBlocked();
+    let isBlocked = false;
+    let remainingTime = 0;
+
+    if (this.currentBlockType === 'youtube') {
+      isBlocked = await TimerManager.isYoutubeBlocked();
+      remainingTime = await TimerManager.getYoutubeRemainingTime();
+    } else {
+      isBlocked = await TimerManager.isBlocked();
+      remainingTime = await TimerManager.getRemainingTime();
+    }
+
     if (!isBlocked) {
+      // It's possible the other timer is still active, but youtubeBlocker.js will handle calling show() or removeOverlay()
       this.removeOverlay();
       return;
     }
 
-    const remainingTime = await TimerManager.getRemainingTime();
     const timerDisplay = document.getElementById('shorts-blocker-timer');
     if (timerDisplay) {
       timerDisplay.textContent = TimerManager.formatRemainingTime(remainingTime);
     }
   },
 
-  async show() {
-    const isBlocked = await TimerManager.isBlocked();
-    if (isBlocked) {
-      this.createOverlay();
-      await this.updateTimer();
-      
-      if (!this.timerInterval) {
-        this.timerInterval = setInterval(() => {
-          this.updateTimer();
-        }, 1000);
-      }
+  async show(blockType) {
+    this.createOverlay(blockType);
+    await this.updateTimer();
+    
+    if (!this.timerInterval) {
+      this.timerInterval = setInterval(() => {
+        this.updateTimer();
+      }, 1000);
     }
   }
 };

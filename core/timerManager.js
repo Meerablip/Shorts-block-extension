@@ -16,6 +16,23 @@ const TimerManager = {
     await StorageManager.setBlockEndTime(endTime);
     return endTime;
   },
+
+  async isYoutubeBlocked() {
+    const endTime = await StorageManager.getYoutubeBlockEndTime();
+    return Date.now() < endTime;
+  },
+
+  async getYoutubeRemainingTime() {
+    const endTime = await StorageManager.getYoutubeBlockEndTime();
+    const remaining = endTime - Date.now();
+    return remaining > 0 ? remaining : 0;
+  },
+
+  async startYoutubeBlock(hours) {
+    const endTime = Date.now() + hours * 60 * 60 * 1000;
+    await StorageManager.setYoutubeBlockEndTime(endTime);
+    return endTime;
+  },
   
   formatRemainingTime(milliseconds) {
     if (milliseconds <= 0) return "00:00:00";

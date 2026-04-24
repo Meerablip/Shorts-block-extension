@@ -14,35 +14,59 @@
       <h1>Focus Mode</h1>
     </div>
 
-    <!-- Global Settings -->
-    <div class="settings-group">
-      <label class="setting-item">
-        <input type="checkbox" id="block-whole-youtube">
-        <span>Block entire YouTube site</span>
-      </label>
-    </div>
-
-    <!-- Active Timer View -->
-    <div id="active-view" class="view hidden">
-      <p class="status-text">Blocking is active. Stay focused!</p>
-      <div class="timer-display" id="popup-timer">00:00:00</div>
-      <p class="warning-text">Block cannot be cancelled early.</p>
-    </div>
-
-    <!-- Set Block View -->
-    <div id="setup-view" class="view">
-      <p class="desc">Select how long to block short-form content.</p>
-
-      <div class="duration-options">
-        <button class="duration-btn" data-hours="1">1 hr</button>
-        <button class="duration-btn" data-hours="3">3 hrs</button>
-        <button class="duration-btn" data-hours="5">5 hrs</button>
-        <button class="duration-btn" data-hours="24">24 hrs</button>
-      </div>
+    <!-- Shorts & Reels Blocker Section -->
+    <div class="section-container">
+      <h2 class="section-title">Shorts & Reels</h2>
       
-      <div class="custom-duration">
-        <input type="number" id="custom-hours" min="0.5" step="0.5" placeholder="Custom hrs">
-        <button id="start-custom-btn" class="primary-btn">Start</button>
+      <!-- Shorts Active Timer View -->
+      <div id="shorts-active-view" class="view hidden">
+        <p class="status-text">Blocking is active. Stay focused!</p>
+        <div class="timer-display" id="shorts-popup-timer">00:00:00</div>
+        <p class="warning-text">Block cannot be cancelled early.</p>
+      </div>
+
+      <!-- Shorts Set Block View -->
+      <div id="shorts-setup-view" class="view">
+        <p class="desc">Select how long to block short-form content.</p>
+        <div class="duration-options">
+          <button class="duration-btn shorts-duration" data-hours="1">1 hr</button>
+          <button class="duration-btn shorts-duration" data-hours="3">3 hrs</button>
+          <button class="duration-btn shorts-duration" data-hours="5">5 hrs</button>
+          <button class="duration-btn shorts-duration" data-hours="24">24 hrs</button>
+        </div>
+        <div class="custom-duration">
+          <input type="number" id="shorts-custom-hours" min="0.5" step="0.5" placeholder="Custom hrs">
+          <button id="shorts-start-custom-btn" class="primary-btn">Start</button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Full YouTube Blocker Section -->
+    <div class="section-container">
+      <h2 class="section-title">Entire YouTube</h2>
+      
+      <!-- YT Active Timer View -->
+      <div id="yt-active-view" class="view hidden">
+        <p class="status-text">YouTube is fully blocked.</p>
+        <div class="timer-display" id="yt-popup-timer">00:00:00</div>
+        <p class="warning-text">Block cannot be cancelled early.</p>
+      </div>
+
+      <!-- YT Set Block View -->
+      <div id="yt-setup-view" class="view">
+        <p class="desc">Select how long to block the entire site.</p>
+        <div class="duration-options">
+          <button class="duration-btn yt-duration" data-hours="1">1 hr</button>
+          <button class="duration-btn yt-duration" data-hours="3">3 hrs</button>
+          <button class="duration-btn yt-duration" data-hours="5">5 hrs</button>
+          <button class="duration-btn yt-duration" data-hours="24">24 hrs</button>
+        </div>
+        <div class="custom-duration">
+          <input type="number" id="yt-custom-hours" min="0.5" step="0.5" placeholder="Custom hrs">
+          <button id="yt-start-custom-btn" class="primary-btn">Start</button>
+        </div>
       </div>
     </div>
   </div>
